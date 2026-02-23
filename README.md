@@ -159,43 +159,49 @@ Poppy works → Updates JSON files → Dashboard reads JSON → You see updates
 
 ---
 
-## 🔐 Security Monitoring (ACTIVE)
+## 🔐 Security Monitoring (ACTIVE - SILENT MODE)
 
-Based on advice from Alex Finn, the following security alerts are now configured:
+Based on advice from Alex Finn: *"Most people running OpenClaw have zero alerts set up... set up these 3 alerts today."*
 
-### Active Monitoring (via OpenClaw Cron)
+### Silent Monitoring (Alerts Only When Issues Found)
 
-1. **Disk Space Monitor** — Every hour
-   - Checks if disk usage exceeds 90%
-   - Alerts before system crashes
-   - Script: `scripts/security-monitor.sh disk`
+**Current Setup:**
+- **Frequency:** Every 6 hours (4x daily at 12 AM, 6 AM, 12 PM, 6 PM)
+- **Mode:** Silent — you only hear from me when there's an actual problem
+- **Script:** `scripts/security-alert.sh`
 
-2. **SSH Brute Force Detection** — Every 15 minutes
-   - Monitors for failed login attempts
-   - Instantly alerts on suspicious activity
-   - Script: `scripts/security-monitor.sh ssh`
+**What Gets Monitored:**
+1. **Disk Space** — Alerts only if usage exceeds 90%
+2. **SSH Security** — Alerts only if brute force attacks detected (SSH must be enabled first)
+3. **Config Integrity** — Alerts only if unauthorized OpenClaw config changes detected
 
-3. **Daily Config Audit** — Every morning at 9 AM
-   - Reviews OpenClaw configuration changes
-   - Detects unauthorized modifications
-   - Script: `scripts/security-monitor.sh config`
+### Why Silent Mode?
+
+Originally set to every 15 minutes, but getting "all clear" messages constantly (even at 3 AM) is annoying. Now you get:
+- ✅ Peace and quiet when everything's secure
+- 🚨 Immediate alerts when something's actually wrong
+- 📊 4 comprehensive checks per day (vs 96 with the old 15-min schedule)
 
 ### Manual Security Check
 
-Run all checks at once:
+Run on-demand:
 ```bash
-./scripts/security-monitor.sh all
+./scripts/security-alert.sh
+```
+
+Or comprehensive check with all details:
+```bash
+./scripts/security-check.sh all
 ```
 
 ### Cron Jobs Active
 
-| Job | Schedule | Purpose |
-|-----|----------|---------|
-| security:disk-monitor | Every hour | Disk space alerting |
-| security:ssh-monitor | Every 15 min | SSH intrusion detection |
-| security:config-audit | Daily at 9 AM | Configuration integrity |
+| Job | Schedule | Mode |
+|-----|----------|------|
+| security:silent-monitor | Every 6 hours | Silent (alerts only) |
+| Known Traveler Canada Reminder | Wednesdays 12 PM | Announce |
 
-**Note:** These jobs alert via Telegram when triggered. No more sleeping through security breaches!
+**Status:** 🟢 All monitoring active and optimized for minimal noise.
 
 ---
 
