@@ -159,5 +159,45 @@ Poppy works → Updates JSON files → Dashboard reads JSON → You see updates
 
 ---
 
+## 🔐 Security Monitoring (ACTIVE)
+
+Based on advice from Alex Finn, the following security alerts are now configured:
+
+### Active Monitoring (via OpenClaw Cron)
+
+1. **Disk Space Monitor** — Every hour
+   - Checks if disk usage exceeds 90%
+   - Alerts before system crashes
+   - Script: `scripts/security-monitor.sh disk`
+
+2. **SSH Brute Force Detection** — Every 15 minutes
+   - Monitors for failed login attempts
+   - Instantly alerts on suspicious activity
+   - Script: `scripts/security-monitor.sh ssh`
+
+3. **Daily Config Audit** — Every morning at 9 AM
+   - Reviews OpenClaw configuration changes
+   - Detects unauthorized modifications
+   - Script: `scripts/security-monitor.sh config`
+
+### Manual Security Check
+
+Run all checks at once:
+```bash
+./scripts/security-monitor.sh all
+```
+
+### Cron Jobs Active
+
+| Job | Schedule | Purpose |
+|-----|----------|---------|
+| security:disk-monitor | Every hour | Disk space alerting |
+| security:ssh-monitor | Every 15 min | SSH intrusion detection |
+| security:config-audit | Daily at 9 AM | Configuration integrity |
+
+**Note:** These jobs alert via Telegram when triggered. No more sleeping through security breaches!
+
+---
+
 Created by OpenClaw (Poppy) for Martin
-Last updated: 2025-02-22
+Last updated: 2025-02-23
